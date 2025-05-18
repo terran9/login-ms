@@ -1,6 +1,7 @@
 package com.travel_tales.voyage_engine.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,13 @@ public class GroupServiceImpl implements GroupService {
 		        group.setCreatedDate(new Date());
 
 		       return groupRepo.save(group);
+	}
+
+	@Override
+	public List<Group> getGroups(String username) {
+		User owner = userRepo.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		return groupRepo.findByOwner(owner);
 	}
 
 }
